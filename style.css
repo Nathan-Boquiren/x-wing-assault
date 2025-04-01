@@ -1,0 +1,191 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    position: relative;
+    background-color: black;
+    background-image: url(https://wallpaperaccess.com/full/1268183.jpg);
+    background-size: cover;
+    overflow: hidden;
+    background-position: center 100%;
+    animation: animateBg 10s linear infinite;
+}
+
+@keyframes animateBg {
+    from {
+        background-position: center 85%;
+    }
+    to {
+        background-position: center -400%;
+    }
+}
+
+#app {
+    height: 100%;
+    position: relative;
+}
+
+#player {
+    min-width: 5rem;
+    min-height: 5rem;
+    background-image: url(https://th.bing.com/th/id/R.8312925914f3d6afdd49fc2fb382ac32?rik=Q%2bqw3npvtBlTLQ&riu=http%3a%2f%2fpixelartmaker-data-78746291193.nyc3.digitaloceanspaces.com%2fimage%2f47cad7b8d000e1a.png&ehk=05VSgEuuNWUN4E9zfSDmRtjNVmdIq%2bh525NSB3AWgu8%3d&risl=&pid=ImgRaw&r=0);
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    border-top-left-radius: 50% 100%;
+    border-top-right-radius: 50% 100%;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    position: absolute;
+    transform: translateX(-50%);
+    bottom: 7rem;
+    left: 50%;
+}
+
+.laser {
+    width: 3px;
+    height: 2rem;
+    background-color: rgb(255, 189, 189);
+    box-shadow: 
+        0 0 2px red, 
+        0 0 4px rgba(255, 0, 0, 0.75), 
+        0 0 6px rgba(255, 0, 0, 0.5),
+        0 0 8px rgba(255, 0, 0, 0.25);
+    border-radius: 100vmax;
+    position: absolute;
+    bottom: 8rem;
+    transform: translateX(-50%);
+    z-index: -1;
+    animation: shoot 1s linear forwards;
+}
+
+@keyframes shoot {
+    from { bottom: 8rem; }
+    to { bottom: 100%; }
+}
+
+/* Targets */
+
+.target {
+    position: absolute;
+    transform: translateX(-50%);
+    height: 5rem;
+    aspect-ratio: 1;
+    background-image: url(https://th.bing.com/th/id/R.5864aaf5476645f6a21d2f3a0b09faaa?rik=MS9srj3MDClh%2fg&riu=http%3a%2f%2fpixelartmaker.com%2fart%2f8ebedec01a2d550.png&ehk=stJp7QcoYMqLNDxOELw5lNXQEY7hnIo4ywtSaK2y6c4%3d&risl=&pid=ImgRaw&r=0&sres=1&sresct=1);
+    /* filter: invert(100%); */
+    /* background-image: url(https://toppng.com/uploads/preview/tiefighter-tie-fighter-pixel-art-11563611990qdtl9qwd4n.png); */
+    background-repeat: no-repeat;
+    background-size: contain;
+    bottom: 100%;
+    transition: scale 100ms ease 50ms;
+    animation: moveTarget 3s linear forwards;
+}
+
+@keyframes moveTarget {
+    from {
+        bottom: 100%;   
+    }
+    to {
+        bottom: 0%;
+        transform: translateX(-50%) translateY(100%);
+    }
+}
+
+.target.hit-1 {
+    filter: sepia(1) hue-rotate(200deg);
+}
+
+.target.hit-2{
+    filter: sepia(1) hue-rotate(300deg);
+}
+
+.target.blow-up {
+    filter: none;
+    background-image: url(https://ugokawaii.com/wp-content/uploads/2023/09/explosion.gif);
+}
+
+/* score */
+
+.info-container {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    z-index: 5;
+}
+
+.info-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.info-wrapper h2 {
+    color: white;
+    font-family: "Press Start 2P", Arial, Helvetica, sans-serif;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+.info-wrapper div {
+    color: white;
+    font-family: "Press Start 2P", Arial, Helvetica, sans-serif;
+    font-size: 2rem;
+}
+
+.info-wrapper div::selection, .info-wrapper h2::selection {
+    background-color: transparent;
+}
+
+/* Game over msg */
+
+#game-over-msg {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    font-family: "Press Start 2P", Arial, Helvetica, sans-serif;
+    font-size: 4rem;
+    color: white;
+    text-align: center;
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 1);
+}
+
+#game-over-msg h2::selection, #restart-btn::selection {
+    background-color: transparent;
+}
+
+#restart-btn {
+    background-color: transparent;
+    font-family: "Press Start 2P", Arial, Helvetica, sans-serif;
+    color: red;
+    font-size: 2rem;
+    margin: 1rem;
+    padding: 1rem;
+    border: 2px solid red;
+    cursor: pointer;
+}
+
+#restart-btn:hover {
+    background-color: red;
+    color: black;
+}

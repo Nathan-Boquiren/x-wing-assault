@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Game</title>
+  </head>
+
+  <body>
+    <main id="app">
+      <div id="player"></div>
+
+      <div class="info-container">
+        <div class="info-wrapper">
+          <h2>SCORE:</h2>
+          <div id="score-wrapper">00</div>
+        </div>
+
+        <div class="info-wrapper">
+          <h2>LEVEL:</h2>
+          <div id="level-wrapper">01</div>
+        </div>
+
+        <div class="info-wrapper">
+          <h2>LIVES:</h2>
+          <div id="lives-wrapper">3.0</div>
+        </div>
+      </div>
+
+      <div id="game-over-msg">
+        <h2>GAME OVER</h2>
+        <button id="restart-btn" onclick="location.reload()">RESTART</button>
+      </div>
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>
