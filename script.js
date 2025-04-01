@@ -1,7 +1,6 @@
 let cl = console.log;
 
 // DOM Elements
-
 const app = document.getElementById("app");
 const player = document.getElementById("player");
 const scoreWrapper = document.getElementById("score-wrapper");
@@ -9,7 +8,9 @@ const levelWrapper = document.getElementById("level-wrapper");
 const gameOverMsg = document.getElementById("game-over-msg");
 const livesWrapper = document.getElementById("lives-wrapper");
 
-// Variables
+const blastAudio = new Audio("blast.wav");
+
+// Game Variables
 let score = 0;
 let lvl = 1;
 let lives = 3;
@@ -17,21 +18,20 @@ let targetSpeed = 1000;
 let minSpeed = 500;
 let game = true;
 
-// create players
-
+// ===== Game Setup =====
 let targetInterval = setInterval(() => {
   createTarget();
 }, targetSpeed);
 
-// Control player
+// Player Controls
 document.body.addEventListener("mousemove", (e) => {
   let mX = (e.clientX / window.innerWidth) * 100;
   player.style.left = `${mX}%`;
 });
 
-// Shoot laser
 document.body.addEventListener("mousedown", () => {
   let playerX = player.offsetLeft;
+  if (!game) return;
   if (game === true) {
     playBlast();
   }
@@ -39,7 +39,9 @@ document.body.addEventListener("mousedown", () => {
   shootLaser(playerX + 32);
 });
 
+// Laser Functions
 function shootLaser(xPosition) {
+  // Create and position laser element
   const laser = document.createElement("div");
   laser.className = "laser";
   laser.style.left = `${xPosition}px`;
@@ -47,6 +49,7 @@ function shootLaser(xPosition) {
 
   let shotTarget = false;
 
+  // Check for collisions every 16ms
   let collisionCheck = setInterval(() => {
     let targets = document.querySelectorAll(".target");
     let collisionTarget = checkCollision(laser, targets);
@@ -70,20 +73,22 @@ function shootLaser(xPosition) {
     }
   }, 16);
 
+  // Remove laser after 1 second if no target hit
   setTimeout(() => {
     clearInterval(collisionCheck);
-    if (!shotTarget) {
+    if (!shotTarget && laser.parentNode) {
       app.removeChild(laser);
     }
   }, 1000);
 }
 
 function playBlast() {
-  const blast = new Audio("blast.wav");
-  blast.play();
+  blastAudio.play();
 }
 
+// Score and Level Management
 function increaseScore() {
+  // Update score and check for level increase
   score += 10;
   scoreWrapper.innerHTML = score;
   if (score % 200 === 0) {
@@ -92,6 +97,7 @@ function increaseScore() {
 }
 
 function increaseLvl() {
+  // Increase level and adjust target spawn speed
   lvl++;
   targetSpeed -= 50;
   if (targetSpeed <= minSpeed) {
@@ -105,7 +111,26 @@ function increaseLvl() {
   levelWrapper.innerHTML = lvl < 10 ? `0${lvl}` : `${lvl}`;
 }
 
+// Target Management
+function createTarget() {
+  // Create target at random X position
+  let randX = Math.floor(Math.random() * 100 + 1);
+  const target = document.createElement("div");
+  target.className = "target";
+  target.style.left = `${randX}%`;
+  app.appendChild(target);
+
+  // Remove target after 3 seconds if not hit
+  setTimeout(() => {
+    if (target.parentNode) {
+      app.removeChild(target);
+      decreaseLives();
+    }
+  }, 3000);
+}
+
 function removeTarget(target, laser) {
+  // Remove target with animation
   target.classList.add("blow-up");
   if (laser && laser.parentNode) {
     app.removeChild(laser);
@@ -117,9 +142,9 @@ function removeTarget(target, laser) {
   }, 600);
 }
 
-// Check collisions
-
+// Collision Detection
 function checkCollision(laser, targets) {
+  // Check if laser intersects with any target
   let laserX = laser.offsetLeft;
   let laserY = laser.offsetTop;
   let laserHeight = laser.clientHeight;
@@ -132,7 +157,6 @@ function checkCollision(laser, targets) {
     let targetHeight = target.clientHeight;
 
     let xOverlap = laserX >= centerX - diameter && laserX <= centerX + diameter;
-
     let yOverlap =
       laserY <= targetY + targetHeight && laserY + laserHeight >= targetY;
 
@@ -143,24 +167,9 @@ function checkCollision(laser, targets) {
   return;
 }
 
-// Create targets
-
-function createTarget() {
-  let randX = Math.floor(Math.random() * 100 + 1);
-  const target = document.createElement("div");
-  target.className = "target";
-  target.style.left = `${randX}%`;
-  app.appendChild(target);
-
-  setTimeout(() => {
-    if (target.parentNode) {
-      app.removeChild(target);
-      decreaseLives();
-    }
-  }, 3000);
-}
-
+// Lives and Game Over
 function decreaseLives() {
+  // Reduce lives and check for game over
   lives -= 0.5;
   if (lives <= 0) {
     lives = 0;
@@ -169,9 +178,8 @@ function decreaseLives() {
   livesWrapper.innerHTML = `${lives.toFixed(1)}`;
 }
 
-// Game over
-
 function gameOver() {
+  // End game and show game over message
   game = false;
   clearInterval(targetInterval);
   gameOverMsg.style.display = "flex";
