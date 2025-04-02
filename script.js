@@ -203,6 +203,9 @@ function usePowerUp() {
     livesWrapper.classList.remove("powered-up");
   }, 500);
   decreaseLives(-2);
+
+  const powerUpSound = new Audio("power-up.wav");
+  powerUpSound.play();
 }
 
 function checkPowerUpCollision(powerUp) {
