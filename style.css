@@ -35,7 +35,7 @@ body {
 #player {
     min-width: 5rem;
     min-height: 5rem;
-    background-image: url(https://th.bing.com/th/id/R.8312925914f3d6afdd49fc2fb382ac32?rik=Q%2bqw3npvtBlTLQ&riu=http%3a%2f%2fpixelartmaker-data-78746291193.nyc3.digitaloceanspaces.com%2fimage%2f47cad7b8d000e1a.png&ehk=05VSgEuuNWUN4E9zfSDmRtjNVmdIq%2bh525NSB3AWgu8%3d&risl=&pid=ImgRaw&r=0);
+    background-image: url(imgs/player.png);
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
@@ -88,9 +88,7 @@ body {
     transform: translateX(-50%);
     height: 5rem;
     aspect-ratio: 1;
-    background-image: url(https://th.bing.com/th/id/R.5864aaf5476645f6a21d2f3a0b09faaa?rik=MS9srj3MDClh%2fg&riu=http%3a%2f%2fpixelartmaker.com%2fart%2f8ebedec01a2d550.png&ehk=stJp7QcoYMqLNDxOELw5lNXQEY7hnIo4ywtSaK2y6c4%3d&risl=&pid=ImgRaw&r=0&sres=1&sresct=1);
-    /* filter: invert(100%); */
-    /* background-image: url(https://toppng.com/uploads/preview/tiefighter-tie-fighter-pixel-art-11563611990qdtl9qwd4n.png); */
+    background-image: url(imgs/target-1.png);
     background-repeat: no-repeat;
     background-size: contain;
     bottom: 100%;
@@ -98,13 +96,38 @@ body {
     animation: moveTarget 3s linear forwards;
 }
 
+#app.round-5 .target {
+    height: 7rem;
+    background-image: url(imgs/target-2.png);
+    animation: moveTarget 2.75s linear forwards;
+}
+
+#app.round-10 .target {
+    background-image: url(imgs/target-3.png);
+    transform: translateX(-50%) rotate(90deg);
+    animation: move10Target 2.5s linear forwards;
+    
+}
+
 @keyframes moveTarget {
     from {
-        bottom: 100%;   
+        bottom: 100%;
     }
     to {
         bottom: 0%;
         transform: translateX(-50%) translateY(100%);
+    }
+}
+
+/* advanced target for round 5+ */
+
+@keyframes move10Target {
+    from {
+        bottom: 100%;   
+    }
+    to {
+        bottom: -5rem;
+        transform: translateX(-50%) rotate(90deg);
     }
 }
 
@@ -118,7 +141,7 @@ body {
 
 .target.blow-up {
     filter: none;
-    background-image: url(https://ugokawaii.com/wp-content/uploads/2023/09/explosion.gif);
+    background-image: url(https://ugokawaii.com/wp-content/uploads/2023/09/explosion.gif) !important;
 }
 
 /* score */

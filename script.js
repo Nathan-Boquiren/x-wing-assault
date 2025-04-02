@@ -19,7 +19,7 @@ let targetSpeed = 1000;
 let minSpeed = 500;
 let game = true;
 let powerUpInterval;
-let firstPowerUp = false;
+let powerUpInUse = false;
 
 // ===== Game Setup =====
 let targetInterval = setInterval(() => {
@@ -108,6 +108,13 @@ function increaseLvl() {
     targetSpeed = minSpeed;
   }
 
+  if (lvl === 5) {
+    app.classList.add("round-5");
+  } else if (lvl === 10) {
+    app.classList.remove("round-5");
+    app.classList.add("round-10");
+  }
+
   clearInterval(targetInterval);
   targetInterval = setInterval(() => {
     createTarget();
@@ -172,7 +179,7 @@ function checkCollision(laser, targets) {
   return;
 }
 
-// ===== Power Ups =====
+// Power Ups
 function spawnPowerUp() {
   let randX = Math.floor(Math.random() * 100 + 1);
   const powerUp = document.createElement("div");
@@ -239,14 +246,14 @@ function checkPowerUpCollision(powerUp) {
 function decreaseLives(inc) {
   // Reduce lives and check for game over
   lives -= inc;
-  if (lives < 2 && !firstPowerUp) {
-    firstPowerUp = true;
+  if (lives < 2 && !powerUpInUse) {
+    powerUpInUse = true;
     powerUpInterval = setInterval(() => {
       spawnPowerUp();
     }, 10000);
   } else if (lives >= 4) {
     clearInterval(powerUpInterval);
-    firstPowerUp = false;
+    powerUpInUse = false;
   } else if (lives <= 0) {
     lives = 0;
     gameOver();
