@@ -8,7 +8,8 @@ const levelWrapper = document.getElementById("level-wrapper");
 const gameOverMsg = document.getElementById("game-over-msg");
 const livesWrapper = document.getElementById("lives-wrapper");
 
-const blastAudio = new Audio("blast.wav");
+const crystalImgLink =
+  "https://th.bing.com/th/id/R.113784945ed4c633718b388f6e5c031a?rik=U%2bkzDQItn8ebvQ&riu=http%3a%2f%2fpixelartmaker-data-78746291193.nyc3.digitaloceanspaces.com%2fimage%2fddd7d19f316d09f.png&ehk=DO0MRdQahBFpCqr7dFu%2flWq7SZlrYxWIdkJtT7LfdsU%3d&risl=&pid=ImgRaw&r=0&sres=1&sresct=1";
 
 // Game Variables
 let score = 0;
@@ -83,6 +84,7 @@ function shootLaser(xPosition) {
 }
 
 function playBlast() {
+  const blastAudio = new Audio("blast.wav");
   blastAudio.play();
 }
 
@@ -103,7 +105,7 @@ function increaseLvl() {
   if (targetSpeed <= minSpeed) {
     targetSpeed = minSpeed;
   }
-  cl(targetSpeed);
+
   clearInterval(targetInterval);
   targetInterval = setInterval(() => {
     createTarget();
@@ -124,7 +126,7 @@ function createTarget() {
   setTimeout(() => {
     if (target.parentNode) {
       app.removeChild(target);
-      decreaseLives();
+      decreaseLives(0.5);
     }
   }, 3000);
 }
@@ -167,11 +169,81 @@ function checkCollision(laser, targets) {
   return;
 }
 
+// ===== Power Ups =====
+function spawnPowerUp() {
+  let randX = Math.floor(Math.random() * 100 + 1);
+  const powerUp = document.createElement("div");
+  powerUp.className = "power-up";
+  powerUp.style.backgroundImage = `url(${crystalImgLink})`;
+  powerUp.style.left = `${randX}%`;
+  app.appendChild(powerUp);
+
+  let trackPowerUp = setInterval(() => {
+    let powerUpCollision = checkPowerUpCollision(powerUp);
+    if (powerUpCollision) {
+      clearInterval(trackPowerUp);
+      usePowerUp();
+    }
+  }, 16);
+
+  // Remove power up after 2 seconds if not hit
+  setTimeout(() => {
+    if (powerUp.parentNode) {
+      clearInterval(trackPowerUp);
+      app.removeChild(powerUp);
+    }
+  }, 2000);
+}
+
+function usePowerUp() {
+  player.classList.add("powered-up");
+  livesWrapper.classList.add("powered-up");
+  setTimeout(() => {
+    player.classList.remove("powered-up");
+    livesWrapper.classList.remove("powered-up");
+  }, 500);
+  decreaseLives(-2);
+}
+
+function checkPowerUpCollision(powerUp) {
+  let aligned = false;
+
+  let powerUpX = powerUp.offsetLeft;
+  let powerUpY = powerUp.offsetTop;
+  let playerX = player.offsetLeft;
+  let playerY = player.offsetTop;
+  let playerHalfWidth = player.clientWidth / 2;
+  let playerHalfHeight = player.clientHeight / 2;
+
+  let xAligned =
+    powerUpX >= playerX - playerHalfWidth &&
+    powerUpX <= playerX + playerHalfWidth;
+
+  let yAligned = powerUpY >= playerY - playerHalfHeight;
+
+  if (xAligned && yAligned) {
+    aligned = true;
+  }
+
+  return aligned;
+}
+
+let powerUpInterval;
+let firstPowerUp = false;
+
 // Lives and Game Over
-function decreaseLives() {
+function decreaseLives(inc) {
   // Reduce lives and check for game over
-  lives -= 0.5;
-  if (lives <= 0) {
+  lives -= inc;
+  if (lives < 2 && !firstPowerUp) {
+    firstPowerUp = true;
+    powerUpInterval = setInterval(() => {
+      spawnPowerUp();
+    }, 10000);
+  } else if (lives >= 4) {
+    clearInterval(powerUpInterval);
+    firstPowerUp = false;
+  } else if (lives <= 0) {
     lives = 0;
     gameOver();
   }
@@ -179,8 +251,8 @@ function decreaseLives() {
 }
 
 function gameOver() {
-  // End game and show game over message
   game = false;
+  clearInterval(powerUpInterval);
   clearInterval(targetInterval);
   gameOverMsg.style.display = "flex";
 }

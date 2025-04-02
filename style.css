@@ -47,6 +47,16 @@ body {
     transform: translateX(-50%);
     bottom: 7rem;
     left: 50%;
+    transition: filter 500ms ease;
+}
+
+.powered-up {
+    transition: filter 500ms ease;
+    filter: 
+        drop-shadow(0 0 2px rgb(140, 238, 255))
+        drop-shadow(0 0 4px rgba(140, 238, 255, 0.75))
+        drop-shadow(0 0 7px rgba(140, 238, 255, 0.5))
+        drop-shadow(0 0 10px rgba(140, 238, 255, 0.25));
 }
 
 .laser {
@@ -148,6 +158,28 @@ body {
 
 .info-wrapper div::selection, .info-wrapper h2::selection {
     background-color: transparent;
+}
+
+#lives-wrapper {
+    transition: filter 500ms ease;
+}
+
+/* Power Up */
+
+.power-up {
+    position: absolute;
+    transform: translateX(-50%);
+    height: 3rem;
+    aspect-ratio: 1;
+    background-repeat: no-repeat;
+    background-size: contain;
+    bottom: 100%;
+    filter: 
+        drop-shadow(0 0 2px rgb(186, 230, 255))
+        drop-shadow(0 0 4px rgba(186, 230, 255, 0.66))
+        drop-shadow(0 0 8px rgba(186, 230, 255, 0.33))
+        drop-shadow(0 0 12px rgba(186, 230, 255, 0.15));
+    animation: moveTarget 2s linear forwards;
 }
 
 /* Game over msg */
