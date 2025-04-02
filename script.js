@@ -246,7 +246,7 @@ function checkPowerUpCollision(powerUp) {
 function decreaseLives(inc) {
   // Reduce lives and check for game over
   lives -= inc;
-  if (lives < 2 && !powerUpInUse) {
+  if (lives < 2.5 && !powerUpInUse) {
     powerUpInUse = true;
     powerUpInterval = setInterval(() => {
       spawnPowerUp();
