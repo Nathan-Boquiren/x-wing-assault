@@ -86,7 +86,7 @@ function shootLaser(xPosition) {
 }
 
 function playBlast() {
-  const blastAudio = new Audio("blast.wav");
+  const blastAudio = new Audio("sfx/blast.wav");
   blastAudio.play();
 }
 
@@ -144,6 +144,9 @@ function createTarget() {
 function removeTarget(target, laser) {
   // Remove target with animation
   target.classList.add("blow-up");
+
+  playExplodeAudio();
+
   if (laser && laser.parentNode) {
     app.removeChild(laser);
   }
@@ -154,6 +157,20 @@ function removeTarget(target, laser) {
   }, 600);
 }
 
+// let explodePlaying = false;
+
+function playExplodeAudio() {
+  // if (explodePlaying) return;
+
+  // explodePlaying = true;
+
+  const sfx = new Audio("sfx/explode-1.wav");
+  sfx.volume = 0.4;
+  // sfx.onended = () => {
+  //   explodePlaying = false;
+  // };
+  sfx.play();
+}
 // Collision Detection
 function checkCollision(laser, targets) {
   // Check if laser intersects with any target
@@ -215,7 +232,7 @@ function usePowerUp() {
   decreaseLives(-2);
 
   // play audio sfx
-  const powerUpSound = new Audio("power-up.wav");
+  const powerUpSound = new Audio("sfx/power-up.wav");
   powerUpSound.play();
 }
 
