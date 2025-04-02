@@ -18,6 +18,8 @@ let lives = 3;
 let targetSpeed = 1000;
 let minSpeed = 500;
 let game = true;
+let powerUpInterval;
+let firstPowerUp = false;
 
 // ===== Game Setup =====
 let targetInterval = setInterval(() => {
@@ -116,10 +118,11 @@ function increaseLvl() {
 // Target Management
 function createTarget() {
   // Create target at random X position
-  let randX = Math.floor(Math.random() * 100 + 1);
+  let randX = Math.floor(Math.random() * (window.innerWidth + 1 - 120));
+  randX += 60;
   const target = document.createElement("div");
   target.className = "target";
-  target.style.left = `${randX}%`;
+  target.style.left = `${randX}px`;
   app.appendChild(target);
 
   // Remove target after 3 seconds if not hit
@@ -204,6 +207,7 @@ function usePowerUp() {
   }, 500);
   decreaseLives(-2);
 
+  // play audio sfx
   const powerUpSound = new Audio("power-up.wav");
   powerUpSound.play();
 }
@@ -230,9 +234,6 @@ function checkPowerUpCollision(powerUp) {
 
   return aligned;
 }
-
-let powerUpInterval;
-let firstPowerUp = false;
 
 // Lives and Game Over
 function decreaseLives(inc) {
