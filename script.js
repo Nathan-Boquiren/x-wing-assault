@@ -157,18 +157,9 @@ function removeTarget(target, laser) {
   }, 600);
 }
 
-// let explodePlaying = false;
-
 function playExplodeAudio() {
-  // if (explodePlaying) return;
-
-  // explodePlaying = true;
-
   const sfx = new Audio("sfx/explode-1.wav");
   sfx.volume = 0.4;
-  // sfx.onended = () => {
-  //   explodePlaying = false;
-  // };
   sfx.play();
 }
 // Collision Detection
