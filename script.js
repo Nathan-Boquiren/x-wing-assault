@@ -8,8 +8,9 @@ const levelWrapper = document.getElementById("level-wrapper");
 const gameOverMsg = document.getElementById("game-over-msg");
 const livesWrapper = document.getElementById("lives-wrapper");
 
-const crystalImgLink =
-  "https://th.bing.com/th/id/R.113784945ed4c633718b388f6e5c031a?rik=U%2bkzDQItn8ebvQ&riu=http%3a%2f%2fpixelartmaker-data-78746291193.nyc3.digitaloceanspaces.com%2fimage%2fddd7d19f316d09f.png&ehk=DO0MRdQahBFpCqr7dFu%2flWq7SZlrYxWIdkJtT7LfdsU%3d&risl=&pid=ImgRaw&r=0&sres=1&sresct=1";
+// Element dimensions
+
+const playerWidth = player.clientWidth;
 
 // Game Variables
 let score = 0;
@@ -38,8 +39,8 @@ document.body.addEventListener("mousedown", () => {
   if (game === true) {
     playBlast();
   }
-  shootLaser(playerX - 32);
-  shootLaser(playerX + 32);
+  shootLaser(playerX - playerWidth / 2 + 15);
+  shootLaser(playerX + playerWidth / 2 - 15);
 });
 
 // Laser Functions
@@ -90,9 +91,8 @@ function playBlast() {
   blastAudio.play();
 }
 
-// Score and Level Management
+// Increase Score
 function increaseScore() {
-  // Update score and check for level increase
   score += 10;
   scoreWrapper.innerHTML = score;
   if (score % 200 === 0) {
@@ -100,8 +100,8 @@ function increaseScore() {
   }
 }
 
+// Increase Level
 function increaseLvl() {
-  // Increase level and adjust target spawn speed
   lvl++;
   targetSpeed -= 50;
   if (targetSpeed <= minSpeed) {
@@ -124,15 +124,15 @@ function increaseLvl() {
 
 // Target Management
 function createTarget() {
-  // Create target at random X position
-  let randX = Math.floor(Math.random() * (window.innerWidth + 1 - 120));
-  randX += 60;
+  let randX = Math.floor(
+    Math.random() * (window.innerWidth + 1 - player.clientWidth * 2)
+  );
+  randX += player.clientWidth;
   const target = document.createElement("div");
   target.className = "target";
   target.style.left = `${randX}px`;
   app.appendChild(target);
 
-  // Remove target after 3 seconds if not hit
   setTimeout(() => {
     if (target.parentNode) {
       app.removeChild(target);
@@ -142,7 +142,6 @@ function createTarget() {
 }
 
 function removeTarget(target, laser) {
-  // Remove target with animation
   target.classList.add("blow-up");
 
   playExplodeAudio();
@@ -162,9 +161,9 @@ function playExplodeAudio() {
   sfx.volume = 0.4;
   sfx.play();
 }
+
 // Collision Detection
 function checkCollision(laser, targets) {
-  // Check if laser intersects with any target
   let laserX = laser.offsetLeft;
   let laserY = laser.offsetTop;
   let laserHeight = laser.clientHeight;
@@ -192,7 +191,6 @@ function spawnPowerUp() {
   let randX = Math.floor(Math.random() * 100 + 1);
   const powerUp = document.createElement("div");
   powerUp.className = "power-up";
-  powerUp.style.backgroundImage = `url(${crystalImgLink})`;
   powerUp.style.left = `${randX}%`;
   app.appendChild(powerUp);
 
@@ -252,7 +250,6 @@ function checkPowerUpCollision(powerUp) {
 
 // Lives and Game Over
 function decreaseLives(inc) {
-  // Reduce lives and check for game over
   lives -= inc;
   if (lives < 2.5 && !powerUpInUse) {
     powerUpInUse = true;

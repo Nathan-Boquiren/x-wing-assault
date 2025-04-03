@@ -6,6 +6,11 @@
     margin: 0;
     box-sizing: border-box;
 }
+:root {
+    --player-bottom-offset: 15%;
+    --player-width: 8%;
+    --target-height: 15%;
+}
 
 body {
     height: 100vh;
@@ -33,8 +38,8 @@ body {
 }
 
 #player {
-    min-width: 5rem;
-    min-height: 5rem;
+    width: var(--player-width);
+    aspect-ratio: 1;
     background-image: url(imgs/player.png);
     background-position: center;
     background-size: contain;
@@ -45,7 +50,7 @@ body {
     border-bottom-left-radius: 5px;
     position: absolute;
     transform: translateX(-50%);
-    bottom: 7rem;
+    bottom: var(--player-bottom-offset);
     left: 50%;
     transition: filter 500ms ease;
 }
@@ -60,24 +65,20 @@ body {
 }
 
 .laser {
-    width: 3px;
-    height: 2rem;
+    width: 7px;
+    height: 5%;
     background-color: rgb(255, 189, 189);
     box-shadow: 
-        0 0 2px red, 
-        0 0 4px rgba(255, 0, 0, 0.75), 
-        0 0 6px rgba(255, 0, 0, 0.5),
-        0 0 8px rgba(255, 0, 0, 0.25);
+        0 0 0 3px red;
     border-radius: 100vmax;
     position: absolute;
-    bottom: 8rem;
     transform: translateX(-50%);
     z-index: -1;
     animation: shoot 1s linear forwards;
 }
 
 @keyframes shoot {
-    from { bottom: 8rem; }
+    from { bottom: calc(var(--player-width) + 15%); }
     to { bottom: 100%; }
 }
 
@@ -86,7 +87,7 @@ body {
 .target {
     position: absolute;
     transform: translateX(-50%);
-    height: 5rem;
+    height: var(--target-height);
     aspect-ratio: 1;
     background-image: url(imgs/target-1.png);
     background-repeat: no-repeat;
@@ -97,7 +98,7 @@ body {
 }
 
 #app.round-5 .target {
-    height: 7rem;
+    height: calc(var(--target-height) + 10%);
     background-image: url(imgs/target-2.png);
     animation: moveTarget 2.75s linear forwards;
 }
@@ -126,7 +127,7 @@ body {
         bottom: 100%;   
     }
     to {
-        bottom: -5rem;
+        bottom: calc((var(--target-height)) * -1);
         transform: translateX(-50%) rotate(90deg);
     }
 }
@@ -140,11 +141,31 @@ body {
 }
 
 .target.blow-up {
+    height: var(--target-height) !important;
     filter: none;
     background-image: url(https://ugokawaii.com/wp-content/uploads/2023/09/explosion.gif) !important;
 }
 
-/* score */
+/* Power Up */
+
+.power-up {
+    position: absolute;
+    transform: translateX(-50%);
+    height: 8%;
+    aspect-ratio: 1;
+    background-image: url(https://th.bing.com/th/id/R.113784945ed4c633718b388f6e5c031a?rik=U%2bkzDQItn8ebvQ&riu=http%3a%2f%2fpixelartmaker-data-78746291193.nyc3.digitaloceanspaces.com%2fimage%2fddd7d19f316d09f.png&ehk=DO0MRdQahBFpCqr7dFu%2flWq7SZlrYxWIdkJtT7LfdsU%3d&risl=&pid=ImgRaw&r=0&sres=1&sresct=1);
+    background-repeat: no-repeat;
+    background-size: contain;
+    bottom: 100%;
+    filter: 
+        drop-shadow(0 0 2px rgb(186, 230, 255))
+        drop-shadow(0 0 4px rgba(186, 230, 255, 0.66))
+        drop-shadow(0 0 8px rgba(186, 230, 255, 0.33))
+        drop-shadow(0 0 12px rgba(186, 230, 255, 0.15));
+    animation: moveTarget 2s linear forwards;
+}
+
+/* Info Container */
 
 .info-container {
     position: absolute;
@@ -187,24 +208,6 @@ body {
     transition: filter 500ms ease;
 }
 
-/* Power Up */
-
-.power-up {
-    position: absolute;
-    transform: translateX(-50%);
-    height: 3rem;
-    aspect-ratio: 1;
-    background-repeat: no-repeat;
-    background-size: contain;
-    bottom: 100%;
-    filter: 
-        drop-shadow(0 0 2px rgb(186, 230, 255))
-        drop-shadow(0 0 4px rgba(186, 230, 255, 0.66))
-        drop-shadow(0 0 8px rgba(186, 230, 255, 0.33))
-        drop-shadow(0 0 12px rgba(186, 230, 255, 0.15));
-    animation: moveTarget 2s linear forwards;
-}
-
 /* Game over msg */
 
 #game-over-msg {
@@ -244,3 +247,4 @@ body {
     background-color: red;
     color: black;
 }
+
